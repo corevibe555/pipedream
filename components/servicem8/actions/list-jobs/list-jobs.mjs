@@ -1,9 +1,10 @@
 import app from "../../servicem8.app.mjs";
+import { buildListParams, listQueryPropDefinitions } from "../common/query.mjs";
 
 export default {
   key: "servicem8-list-jobs",
   name: "List Jobs",
-  description: "List jobs with optional filters. [See the documentation](https://developer.servicem8.com/reference/listjobs)",
+  description: `List Job records with optional filtering. [See the documentation](https://developer.servicem8.com/reference/listjobs)`,
   version: "0.0.1",
   annotations: {
     destructiveHint: false,
@@ -13,36 +14,15 @@ export default {
   type: "action",
   props: {
     servicem8: app,
-    filter: {
-      propDefinition: [
-        app,
-        "filter",
-      ],
-    },
-    sort: {
-      propDefinition: [
-        app,
-        "sort",
-      ],
-    },
-    cursor: {
-      propDefinition: [
-        app,
-        "cursor",
-      ],
-    },
+    ...listQueryPropDefinitions,
   },
   async run({ $ }) {
-    const params = this.servicem8.buildListQueryParams({
+    const params = buildListParams({
       filter: this.filter,
       sort: this.sort,
       cursor: this.cursor,
     });
-    const response = await this.servicem8.listResource({
-      $,
-      resource: "job",
-      params,
-    });
+    const response = await this.servicem8.listResource({ $, resource: "job", params });
     $.export("$summary", "Successfully retrieved Job records");
     return response;
   },

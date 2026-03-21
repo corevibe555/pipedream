@@ -1,9 +1,10 @@
-import servicem8 from "../../servicem8.app.mjs";
+import app from "../../servicem8.app.mjs";
+import { uuidProp } from "../common/props.mjs";
 
 export default {
   key: "servicem8-get-queue",
   name: "Get Queue",
-  description: "Get a job queue by UUID. [See the documentation](https://developer.servicem8.com/reference/getjobqueues)",
+  description: `Retrieve a Queue by UUID. [See the documentation](https://developer.servicem8.com/reference/listqueues)`,
   version: "0.0.1",
   annotations: {
     destructiveHint: false,
@@ -12,23 +13,8 @@ export default {
   },
   type: "action",
   props: {
-    servicem8,
-    uuid: {
-      type: "string",
-      label: "Queue",
-      description: "Select the queue to retrieve (search or paste UUID).",
-      useQuery: true,
-      async options({
-        $, prevContext, query,
-      }) {
-        return this.servicem8._uuidOptionsForResource({
-          $: $ ?? this,
-          resource: "queue",
-          prevContext,
-          query,
-        });
-      },
-    },
+    servicem8: app,
+    ...uuidProp,
   },
   async run({ $ }) {
     const response = await this.servicem8.getResource({

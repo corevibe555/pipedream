@@ -1,9 +1,10 @@
-import servicem8 from "../../servicem8.app.mjs";
+import app from "../../servicem8.app.mjs";
+import { uuidProp } from "../common/props.mjs";
 
 export default {
   key: "servicem8-get-company-contact",
   name: "Get Company Contact",
-  description: "Get a company contact by UUID. [See the documentation](https://developer.servicem8.com/reference/getcompanycontacts)",
+  description: `Retrieve a Company Contact by UUID. [See the documentation](https://developer.servicem8.com/reference/listcompanycontacts)`,
   version: "0.0.1",
   annotations: {
     destructiveHint: false,
@@ -12,23 +13,8 @@ export default {
   },
   type: "action",
   props: {
-    servicem8,
-    uuid: {
-      type: "string",
-      label: "Company contact",
-      description: "Select the company contact to retrieve (search or paste UUID).",
-      useQuery: true,
-      async options({
-        $, prevContext, query,
-      }) {
-        return this.servicem8._uuidOptionsForResource({
-          $: $ ?? this,
-          resource: "companycontact",
-          prevContext,
-          query,
-        });
-      },
-    },
+    servicem8: app,
+    ...uuidProp,
   },
   async run({ $ }) {
     const response = await this.servicem8.getResource({

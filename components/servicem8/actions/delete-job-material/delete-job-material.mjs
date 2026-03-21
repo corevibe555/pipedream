@@ -1,9 +1,10 @@
-import servicem8 from "../../servicem8.app.mjs";
+import app from "../../servicem8.app.mjs";
+import { uuidProp } from "../common/props.mjs";
 
 export default {
   key: "servicem8-delete-job-material",
   name: "Delete Job Material",
-  description: "Delete a job material by UUID. [See the documentation](https://developer.servicem8.com/reference/deletejobmaterials)",
+  description: `Delete a Job Material by UUID. [See the documentation](https://developer.servicem8.com/docs/rest-overview)`,
   version: "0.0.1",
   annotations: {
     destructiveHint: true,
@@ -12,23 +13,8 @@ export default {
   },
   type: "action",
   props: {
-    servicem8,
-    uuid: {
-      type: "string",
-      label: "Job material",
-      description: "Select the job material to delete (search or paste UUID).",
-      useQuery: true,
-      async options({
-        $, prevContext, query,
-      }) {
-        return this.servicem8._uuidOptionsForResource({
-          $: $ ?? this,
-          resource: "jobmaterial",
-          prevContext,
-          query,
-        });
-      },
-    },
+    servicem8: app,
+    ...uuidProp,
   },
   async run({ $ }) {
     const response = await this.servicem8.deleteResource({

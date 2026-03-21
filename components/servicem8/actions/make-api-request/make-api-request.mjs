@@ -1,12 +1,11 @@
 import app from "../../servicem8.app.mjs";
-import { normalizeUserApiPath } from "../../common/logic.mjs";
 
 const DOCS = "https://developer.servicem8.com/docs/rest-overview";
 
 export default {
   key: "servicem8-make-api-request",
   name: "Make API Request",
-  description: `Send an authenticated ServiceM8 API request. [See the documentation](${DOCS})`,
+  description: `Send an authenticated request to the ServiceM8 API. Use paths under \`api_1.0/\` (e.g. \`api_1.0/job.json\`) or \`webhook_subscriptions\` for webhooks. [REST overview](${DOCS})`,
   version: "0.0.1",
   annotations: {
     destructiveHint: false,
@@ -29,8 +28,7 @@ export default {
     path: {
       type: "string",
       label: "Path",
-      description:
-        "Path relative to `https://api.servicem8.com/` (e.g. `api_1.0/company` or `api_1.0/company.json`). For `api_1.0/...` routes, `.json` is appended when omitted so responses use the JSON API. Webhook and platform paths (no `api_1.0/` prefix) are unchanged.",
+      description: "Path relative to `https://api.servicem8.com/` (e.g. `api_1.0/company.json`)",
     },
     query: {
       type: "object",
@@ -41,7 +39,7 @@ export default {
     body: {
       type: "object",
       label: "Body",
-      description: "Optional JSON body for POST or DELETE (ignored for GET)",
+      description: "Optional JSON body for POST",
       optional: true,
     },
   },
@@ -49,20 +47,18 @@ export default {
     const {
       method, path, query, body,
     } = this;
-    const resolvedPath = normalizeUserApiPath(path);
-    const includeBody = method !== "GET" && body !== undefined;
     const response = await this.servicem8._makeRequest({
       $,
-      path: resolvedPath,
+      path,
       method,
       ...(query && {
         params: query,
       }),
-      ...(includeBody && {
+      ...(body !== undefined && {
         data: body,
       }),
     });
-    $.export("$summary", `Completed ${method} ${resolvedPath}`);
+    $.export("$summary", `Completed ${method} ${path}`);
     return response;
   },
 };

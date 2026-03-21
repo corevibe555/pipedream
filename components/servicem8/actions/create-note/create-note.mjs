@@ -1,9 +1,10 @@
-import servicem8 from "../../servicem8.app.mjs";
+import app from "../../servicem8.app.mjs";
+import { recordProp } from "../common/props.mjs";
 
 export default {
   key: "servicem8-create-note",
   name: "Create Note",
-  description: "Create a note. [See the documentation](https://developer.servicem8.com/reference/createnotes)",
+  description: `Create a new Note. The new record UUID is returned in the result field recordUuid (HTTP header x-record-uuid). [See the documentation](https://developer.servicem8.com/docs/rest-overview)`,
   version: "0.0.1",
   annotations: {
     destructiveHint: false,
@@ -12,165 +13,16 @@ export default {
   },
   type: "action",
   props: {
-    servicem8,
-    relatedObject: {
-      type: "string",
-      label: "Related Object",
-      description:
-        "Object type this note is attached to ([API](https://developer.servicem8.com/reference/createnotes)); lowercase. Pick a type, then choose the record below.",
-      options: [
-        {
-          label: "Job",
-          value: "job",
-        },
-        {
-          label: "Company",
-          value: "company",
-        },
-        {
-          label: "Staff",
-          value: "staff",
-        },
-        {
-          label: "Company contact",
-          value: "companycontact",
-        },
-        {
-          label: "Job contact",
-          value: "jobcontact",
-        },
-        {
-          label: "Job activity",
-          value: "jobactivity",
-        },
-        {
-          label: "Job material",
-          value: "jobmaterial",
-        },
-        {
-          label: "Job payment",
-          value: "jobpayment",
-        },
-        {
-          label: "Queue",
-          value: "queue",
-        },
-        {
-          label: "Category",
-          value: "category",
-        },
-        {
-          label: "Badge",
-          value: "badge",
-        },
-        {
-          label: "Feedback",
-          value: "feedback",
-        },
-        {
-          label: "Note",
-          value: "note",
-        },
-        {
-          label: "Attachment",
-          value: "dboattachment",
-        },
-      ],
-    },
-    relatedObjectUuid: {
-      type: "string",
-      label: "Related record",
-      description:
-        "Record this note is attached to (choose Related object first, then search).",
-      useQuery: true,
-      async options({
-        $, prevContext, query,
-      }) {
-        const key = (this.relatedObject || "").trim().toLowerCase();
-        const resource = {
-          job: "job",
-          company: "company",
-          staff: "staff",
-          companycontact: "companycontact",
-          jobcontact: "jobcontact",
-          jobactivity: "jobactivity",
-          jobmaterial: "jobmaterial",
-          jobpayment: "jobpayment",
-          queue: "queue",
-          category: "category",
-          badge: "badge",
-          feedback: "feedback",
-          note: "note",
-          dboattachment: "dboattachment",
-        }[key];
-        if (!resource) {
-          return {
-            options: [],
-          };
-        }
-        return this.servicem8._uuidOptionsForResource({
-          $: $ ?? this,
-          resource,
-          prevContext,
-          query,
-        });
-      },
-    },
-    note: {
-      type: "string",
-      label: "Note",
-      description: "Note text and content.",
-    },
-    actionRequired: {
-      type: "string",
-      label: "Action Required",
-      optional: true,
-      description:
-        "Follow-up text when the note requires an action from someone (`action_required`).",
-    },
-    actionCompletedByStaffUuid: {
-      type: "string",
-      label: "Action completed by",
-      useQuery: true,
-      async options({
-        $, prevContext, query,
-      }) {
-        return this.servicem8._uuidOptionsForResource({
-          $: $ ?? this,
-          resource: "staff",
-          prevContext,
-          query,
-        });
-      },
-      optional: true,
-      description:
-        "Staff member who completed the required action (`action_completed_by_staff_uuid`).",
-    },
-    createDate: {
-      type: "string",
-      label: "Create date",
-      optional: true,
-      description:
-        "Timestamp string (`create_date`); format as accepted by the API (e.g. `YYYY-MM-DD HH:MM:SS`).",
-    },
+    servicem8: app,
+    ...recordProp,
   },
   async run({ $ }) {
-    const {
-      body, recordUuid,
-    } = await this.servicem8.createNote({
+    const { body, recordUuid } = await this.servicem8.createResource({
       $,
-      data: {
-        related_object: this.relatedObject,
-        related_object_uuid: this.relatedObjectUuid,
-        note: this.note,
-        action_required: this.actionRequired,
-        action_completed_by_staff_uuid: this.actionCompletedByStaffUuid,
-        create_date: this.createDate,
-      },
+      resource: "note",
+      data: this.record,
     });
-    $.export("$summary", `Created Note${recordUuid
-      ? ` (${recordUuid})`
-      : ""}`);
+    $.export("$summary", `Created Note${recordUuid ? ` (${recordUuid})` : ""}`);
     return {
       body,
       recordUuid,

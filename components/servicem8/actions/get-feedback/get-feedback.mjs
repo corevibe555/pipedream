@@ -1,9 +1,10 @@
-import servicem8 from "../../servicem8.app.mjs";
+import app from "../../servicem8.app.mjs";
+import { uuidProp } from "../common/props.mjs";
 
 export default {
   key: "servicem8-get-feedback",
   name: "Get Feedback",
-  description: "Get feedback by UUID. [See the documentation](https://developer.servicem8.com/reference/getfeedback)",
+  description: `Retrieve a Feedback by UUID. [See the documentation](https://developer.servicem8.com/reference/listfeedback)`,
   version: "0.0.1",
   annotations: {
     destructiveHint: false,
@@ -12,23 +13,8 @@ export default {
   },
   type: "action",
   props: {
-    servicem8,
-    uuid: {
-      type: "string",
-      label: "Feedback",
-      description: "Select the feedback to retrieve (search or paste UUID).",
-      useQuery: true,
-      async options({
-        $, prevContext, query,
-      }) {
-        return this.servicem8._uuidOptionsForResource({
-          $: $ ?? this,
-          resource: "feedback",
-          prevContext,
-          query,
-        });
-      },
-    },
+    servicem8: app,
+    ...uuidProp,
   },
   async run({ $ }) {
     const response = await this.servicem8.getResource({

@@ -3,7 +3,7 @@ import app from "../../servicem8.app.mjs";
 export default {
   key: "servicem8-create-webhook-subscription",
   name: "Create Webhook Subscription",
-  description: "Create or update an object webhook subscription. [See the documentation](https://developer.servicem8.com/reference/post_object_webhook_subscription)",
+  description: "Create or update a webhook subscription (POST `webhook_subscriptions`). [See the documentation](https://developer.servicem8.com/docs/webhooks-overview)",
   version: "0.0.1",
   annotations: {
     destructiveHint: false,
@@ -16,44 +16,27 @@ export default {
     callbackUrl: {
       type: "string",
       label: "Callback URL",
-      description:
-        "URI of the endpoint that receives webhook POSTs when a subscribed field changes (typically HTTPS).",
+      description: "Public HTTPS URL that receives webhook POSTs",
     },
     object: {
       type: "string",
       label: "Object",
-      description:
-        "Object type to subscribe to (e.g. job, company). Required; max 64 characters.",
+      description: "ServiceM8 object to subscribe to (e.g. `Job`, `Company`)",
     },
     fields: {
       type: "string",
       label: "Fields",
-      description:
-        "Comma-separated list of fields on the object to subscribe to.",
-    },
-    uniqueId: {
-      type: "string",
-      label: "Unique ID",
+      description: "Comma-separated fields to include (optional; depends on object type)",
       optional: true,
-      description:
-        "Optional identifier for grouping subscriptions (max 100 characters).",
     },
   },
   async run({ $ }) {
-    // ServiceM8 expects subscription parameters as form-encoded POST body (not query string).
-    const body = new URLSearchParams({
-      object: this.object,
-      fields: this.fields,
+    const params = {
       callback_url: this.callbackUrl,
-    });
-    if (this.uniqueId !== undefined && this.uniqueId !== null
-      && String(this.uniqueId).trim() !== "") {
-      body.set("unique_id", String(this.uniqueId).trim());
-    }
-    const response = await this.servicem8.setHook({
-      $,
-      data: body.toString(),
-    });
+      object: this.object,
+    };
+    if (this.fields) params.fields = this.fields;
+    const response = await this.servicem8.setHook({ $, params });
     $.export("$summary", "Webhook subscription saved");
     return response;
   },

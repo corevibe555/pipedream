@@ -1,9 +1,10 @@
-import servicem8 from "../../servicem8.app.mjs";
+import app from "../../servicem8.app.mjs";
+import { recordProp } from "../common/props.mjs";
 
 export default {
   key: "servicem8-create-job-activity",
   name: "Create Job Activity",
-  description: "Create a job activity. [See the documentation](https://developer.servicem8.com/reference/createjobactivities)",
+  description: `Create a new Job Activity. The new record UUID is returned in the result field recordUuid (HTTP header x-record-uuid). [See the documentation](https://developer.servicem8.com/docs/rest-overview)`,
   version: "0.0.1",
   annotations: {
     destructiveHint: false,
@@ -12,85 +13,16 @@ export default {
   },
   type: "action",
   props: {
-    servicem8,
-    jobUuid: {
-      type: "string",
-      label: "Job",
-      useQuery: true,
-      async options({
-        $, prevContext, query,
-      }) {
-        return this.servicem8._uuidOptionsForResource({
-          $: $ ?? this,
-          resource: "job",
-          prevContext,
-          query,
-        });
-      },
-      description: "Job this activity belongs to.",
-    },
-    staffUuid: {
-      type: "string",
-      label: "Staff",
-      useQuery: true,
-      async options({
-        $, prevContext, query,
-      }) {
-        return this.servicem8._uuidOptionsForResource({
-          $: $ ?? this,
-          resource: "staff",
-          prevContext,
-          query,
-        });
-      },
-      description: "Assigned staff member (`staff_uuid`).",
-    },
-    startDate: {
-      type: "string",
-      label: "Start Date",
-      optional: true,
-      description: "Scheduled start (`YYYY-MM-DD HH:MM:SS` or as accepted by the API).",
-    },
-    endDate: {
-      type: "string",
-      label: "End Date",
-      optional: true,
-      description: "Scheduled end (`YYYY-MM-DD HH:MM:SS` or as accepted by the API).",
-    },
-    materialUuid: {
-      type: "string",
-      label: "Job material",
-      useQuery: true,
-      async options({
-        $, prevContext, query,
-      }) {
-        return this.servicem8._uuidOptionsForResource({
-          $: $ ?? this,
-          resource: "jobmaterial",
-          prevContext,
-          query,
-        });
-      },
-      optional: true,
-      description: "Optional job material line for costing.",
-    },
+    servicem8: app,
+    ...recordProp,
   },
   async run({ $ }) {
-    const {
-      body, recordUuid,
-    } = await this.servicem8.createJobActivity({
+    const { body, recordUuid } = await this.servicem8.createResource({
       $,
-      data: {
-        job_uuid: this.jobUuid,
-        staff_uuid: this.staffUuid,
-        start_date: this.startDate,
-        end_date: this.endDate,
-        material_uuid: this.materialUuid,
-      },
+      resource: "jobactivity",
+      data: this.record,
     });
-    $.export("$summary", `Created Job Activity${recordUuid
-      ? ` (${recordUuid})`
-      : ""}`);
+    $.export("$summary", `Created Job Activity${recordUuid ? ` (${recordUuid})` : ""}`);
     return {
       body,
       recordUuid,

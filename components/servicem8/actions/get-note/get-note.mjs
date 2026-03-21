@@ -1,9 +1,10 @@
-import servicem8 from "../../servicem8.app.mjs";
+import app from "../../servicem8.app.mjs";
+import { uuidProp } from "../common/props.mjs";
 
 export default {
   key: "servicem8-get-note",
   name: "Get Note",
-  description: "Get a note by UUID. [See the documentation](https://developer.servicem8.com/reference/getnotes)",
+  description: `Retrieve a Note by UUID. [See the documentation](https://developer.servicem8.com/reference/listnotes)`,
   version: "0.0.1",
   annotations: {
     destructiveHint: false,
@@ -12,23 +13,8 @@ export default {
   },
   type: "action",
   props: {
-    servicem8,
-    uuid: {
-      type: "string",
-      label: "Note",
-      description: "Select the note to retrieve (search or paste UUID).",
-      useQuery: true,
-      async options({
-        $, prevContext, query,
-      }) {
-        return this.servicem8._uuidOptionsForResource({
-          $: $ ?? this,
-          resource: "note",
-          prevContext,
-          query,
-        });
-      },
-    },
+    servicem8: app,
+    ...uuidProp,
   },
   async run({ $ }) {
     const response = await this.servicem8.getResource({

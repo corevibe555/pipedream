@@ -1,9 +1,10 @@
-import servicem8 from "../../servicem8.app.mjs";
+import app from "../../servicem8.app.mjs";
+import { uuidProp } from "../common/props.mjs";
 
 export default {
   key: "servicem8-delete-staff",
   name: "Delete Staff",
-  description: "Delete a staff member by UUID. [See the documentation](https://developer.servicem8.com/reference/deletestaffmembers)",
+  description: `Delete a Staff by UUID. [See the documentation](https://developer.servicem8.com/docs/rest-overview)`,
   version: "0.0.1",
   annotations: {
     destructiveHint: true,
@@ -12,23 +13,8 @@ export default {
   },
   type: "action",
   props: {
-    servicem8,
-    uuid: {
-      type: "string",
-      label: "Staff member",
-      description: "Select the staff member to delete (search or paste UUID).",
-      useQuery: true,
-      async options({
-        $, prevContext, query,
-      }) {
-        return this.servicem8._uuidOptionsForResource({
-          $: $ ?? this,
-          resource: "staff",
-          prevContext,
-          query,
-        });
-      },
-    },
+    servicem8: app,
+    ...uuidProp,
   },
   async run({ $ }) {
     const response = await this.servicem8.deleteResource({

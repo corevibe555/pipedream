@@ -3,7 +3,7 @@ import app from "../../servicem8.app.mjs";
 export default {
   key: "servicem8-send-sms",
   name: "Send SMS",
-  description: "Send an SMS via the Messaging API (charges may apply). [See the documentation](https://developer.servicem8.com/reference/send_sms)",
+  description: "Send an SMS via the ServiceM8 Messaging API (charges apply). [See the documentation](https://developer.servicem8.com/reference/send_sms)",
   version: "0.0.1",
   annotations: {
     destructiveHint: false,
@@ -28,17 +28,6 @@ export default {
       label: "Regarding Job UUID",
       description: "Optional job UUID to link the SMS to the job diary",
       optional: true,
-      useQuery: true,
-      async options({
-        $, prevContext, query,
-      }) {
-        return this.servicem8._uuidOptionsForResource({
-          $: $ ?? this,
-          resource: "job",
-          prevContext,
-          query,
-        });
-      },
     },
   },
   async run({ $ }) {
@@ -46,23 +35,12 @@ export default {
       to: this.to,
       message: this.message,
     };
-    const regardingJob = this.regardingJobUUID;
-    if (
-      regardingJob !== undefined &&
-      regardingJob !== null &&
-      String(regardingJob).trim() !== ""
-    ) {
-      data.regardingJobUUID = String(regardingJob).trim();
-    }
+    if (this.regardingJobUUID) data.regardingJobUUID = this.regardingJobUUID;
     const response = await this.servicem8.sendSms({
       $,
       data,
     });
-    const digits = String(this.to).replace(/\D/g, "");
-    const tail = digits.length >= 4
-      ? digits.slice(-4)
-      : "****";
-    $.export("$summary", `SMS submitted to ServiceM8 (recipient …${tail})`);
+    $.export("$summary", "SMS submitted to ServiceM8");
     return response;
   },
 };

@@ -1,9 +1,10 @@
-import servicem8 from "../../servicem8.app.mjs";
+import app from "../../servicem8.app.mjs";
+import { uuidProp } from "../common/props.mjs";
 
 export default {
   key: "servicem8-get-job-contact",
   name: "Get Job Contact",
-  description: "Get a job contact by UUID. [See the documentation](https://developer.servicem8.com/reference/getjobcontacts)",
+  description: `Retrieve a Job Contact by UUID. [See the documentation](https://developer.servicem8.com/reference/listjobcontacts)`,
   version: "0.0.1",
   annotations: {
     destructiveHint: false,
@@ -12,23 +13,8 @@ export default {
   },
   type: "action",
   props: {
-    servicem8,
-    uuid: {
-      type: "string",
-      label: "Job contact",
-      description: "Select the job contact to retrieve (search or paste UUID).",
-      useQuery: true,
-      async options({
-        $, prevContext, query,
-      }) {
-        return this.servicem8._uuidOptionsForResource({
-          $: $ ?? this,
-          resource: "jobcontact",
-          prevContext,
-          query,
-        });
-      },
-    },
+    servicem8: app,
+    ...uuidProp,
   },
   async run({ $ }) {
     const response = await this.servicem8.getResource({
