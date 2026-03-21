@@ -8,88 +8,6 @@
 export const API_PATH = "api_1.0";
 
 /**
- * ServiceM8 API resources with display labels. Aligned with
- * [ServiceM8 REST API reference](https://developer.servicem8.com/reference).
- */
-export const RESOURCES = {
-  job: {
-    label: "Job",
-    noun: "job",
-  },
-  company: {
-    label: "Company",
-    noun: "company",
-  },
-  companycontact: {
-    label: "Company Contact",
-    noun: "company contact",
-  },
-  jobcontact: {
-    label: "Job Contact",
-    noun: "job contact",
-  },
-  jobactivity: {
-    label: "Job Activity",
-    noun: "job activity",
-  },
-  jobmaterial: {
-    label: "Job Material",
-    noun: "job material",
-  },
-  jobpayment: {
-    label: "Job Payment",
-    noun: "job payment",
-  },
-  category: {
-    label: "Category",
-    noun: "category",
-  },
-  staff: {
-    label: "Staff",
-    noun: "staff member",
-  },
-  queue: {
-    label: "Queue",
-    noun: "queue",
-  },
-  note: {
-    label: "Note",
-    noun: "note",
-  },
-  dboattachment: {
-    label: "Attachment",
-    noun: "attachment",
-  },
-  badge: {
-    label: "Badge",
-    noun: "badge",
-  },
-  feedback: {
-    label: "Feedback",
-    noun: "feedback item",
-  },
-  taxrate: {
-    label: "Tax Rate",
-    noun: "tax rate",
-  },
-  /** Asset record (`asset.json`); equipment/sites managed via Asset Management. */
-  asset: {
-    label: "Asset",
-    noun: "asset",
-  },
-  /** Inventory material (`material.json`); used e.g. for staff `labour_material_uuid`. */
-  material: {
-    label: "Material",
-    noun: "material",
-  },
-  /** Security role (`securityrole.json`); used for staff `security_role_uuid`. */
-  securityrole: {
-    label: "Security Role",
-    noun: "security role",
-  },
-};
-
-/**
  * Builds the relative list URL path for a resource (e.g. `api_1.0/job.json`).
  * @param {string} resource - Resource key (e.g. `job`, `company`)
  * @returns {string}
@@ -106,33 +24,6 @@ export function resourceListPath(resource) {
  */
 export function resourceItemPath(resource, uuid) {
   return `${API_PATH}/${resource}/${uuid}.json`;
-}
-
-/**
- * Ensures versioned REST paths (`api_1.0/...`) use a `.json` suffix (JSON API responses).
- * Webhook and platform endpoints (no `api_1.0/` prefix) are left unchanged.
- * @param {string} path - Path relative to `https://api.servicem8.com/`
- * @returns {string}
- */
-export function normalizeUserApiPath(path) {
-  if (path == null || path === "") {
-    return path;
-  }
-  const trimmed = String(path).trim()
-    .replace(/^\/+/, "");
-  if (!trimmed) {
-    return trimmed;
-  }
-  if (!trimmed.startsWith(`${API_PATH}/`)) {
-    return trimmed;
-  }
-  if (trimmed.endsWith(".json")) {
-    return trimmed;
-  }
-  if (/\.html$/i.test(trimmed)) {
-    return trimmed.replace(/\.html$/i, ".json");
-  }
-  return `${trimmed}.json`;
 }
 
 /**
