@@ -4,7 +4,7 @@ export default {
   key: "servicem8-delete-job-activity",
   name: "Delete Job Activity",
   description: "Delete a Job Activity by UUID. [See the documentation](https://developer.servicem8.com/docs/rest-overview)",
-  version: "0.0.2",
+  version: "0.0.4",
   annotations: {
     destructiveHint: true,
     openWorldHint: true,

@@ -4,7 +4,7 @@ export default {
   key: "servicem8-list-categories",
   name: "List Categories",
   description: "List Category records with optional filtering. [See the documentation](https://developer.servicem8.com/reference/listcategories)",
-  version: "0.0.2",
+  version: "0.0.4",
   annotations: {
     destructiveHint: false,
     openWorldHint: true,
