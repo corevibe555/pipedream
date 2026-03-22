@@ -4,7 +4,7 @@ export default {
   key: "servicem8-get-company",
   name: "Get Company",
   description: "Retrieve a Company by UUID.",
-  version: "0.0.2",
+  version: "0.0.4",
   annotations: {
     destructiveHint: false,
     openWorldHint: true,

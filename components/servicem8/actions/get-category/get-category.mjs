@@ -4,7 +4,7 @@ export default {
   key: "servicem8-get-category",
   name: "Get Category",
   description: "Retrieve a Category by UUID. [See the documentation](https://developer.servicem8.com/docs/rest-overview)",
-  version: "0.0.2",
+  version: "0.0.4",
   annotations: {
     destructiveHint: false,
     openWorldHint: true,

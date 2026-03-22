@@ -4,7 +4,7 @@ export default {
   key: "servicem8-list-staff",
   name: "List Staff",
   description: "List Staff records with optional filtering. [See the documentation](https://developer.servicem8.com/reference/liststaff)",
-  version: "0.0.2",
+  version: "0.0.4",
   annotations: {
     destructiveHint: false,
     openWorldHint: true,

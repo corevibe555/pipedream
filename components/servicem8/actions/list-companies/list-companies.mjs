@@ -4,7 +4,7 @@ export default {
   key: "servicem8-list-companies",
   name: "List Companies",
   description: "List Company records with optional filtering. [See the documentation](https://developer.servicem8.com/reference/listcompanies)",
-  version: "0.0.2",
+  version: "0.0.4",
   annotations: {
     destructiveHint: false,
     openWorldHint: true,

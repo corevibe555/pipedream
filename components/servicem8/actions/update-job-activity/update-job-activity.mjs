@@ -4,7 +4,7 @@ export default {
   key: "servicem8-update-job-activity",
   name: "Update Job Activity",
   description: "Update an existing Job Activity. [See the documentation](https://developer.servicem8.com/docs/rest-overview)",
-  version: "0.0.2",
+  version: "0.0.4",
   annotations: {
     destructiveHint: false,
     openWorldHint: true,

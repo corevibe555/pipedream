@@ -4,7 +4,7 @@ export default {
   key: "servicem8-delete-badge",
   name: "Delete Badge",
   description: "Delete a Badge by UUID. [See the documentation](https://developer.servicem8.com/docs/rest-overview)",
-  version: "0.0.2",
+  version: "0.0.4",
   annotations: {
     destructiveHint: true,
     openWorldHint: true,
