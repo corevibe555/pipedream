@@ -24,7 +24,63 @@ const SHARING_LINK_SCOPE_OPTIONS = [
   },
 ];
 
+/**
+ * Source formats supported for PDF conversion on download.
+ * @see https://learn.microsoft.com/en-us/graph/api/driveitem-get-content-format
+ */
+const PDF_CONVERTIBLE_FORMATS = [
+  "doc",
+  "docx",
+  "dot",
+  "dotx",
+  "dotm",
+  "dsn",
+  "dwg",
+  "eml",
+  "epub",
+  "fluidframework",
+  "form",
+  "htm",
+  "html",
+  "loop",
+  "loot",
+  "markdown",
+  "md",
+  "msg",
+  "note",
+  "odp",
+  "ods",
+  "odt",
+  "page",
+  "pps",
+  "ppsx",
+  "ppt",
+  "pptx",
+  "pulse",
+  "rtf",
+  "task",
+  "tif",
+  "tiff",
+  "wbtx",
+  "whiteboard",
+  "xls",
+  "xlsm",
+  "xlsx",
+];
+
+/**
+ * Source formats supported for HTML conversion on download.
+ * @see https://learn.microsoft.com/en-us/graph/api/driveitem-get-content-format
+ */
+const HTML_CONVERTIBLE_FORMATS = [
+  "loop",
+  "fluid",
+  "wbtx",
+];
+
 export default {
   SHARING_LINK_TYPE_OPTIONS,
   SHARING_LINK_SCOPE_OPTIONS,
+  PDF_CONVERTIBLE_FORMATS,
+  HTML_CONVERTIBLE_FORMATS,
 };
