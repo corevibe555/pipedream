@@ -1,0 +1,18 @@
+{
+  "name": "@pipedream/hedy_bot",
+  "version": "0.1.0",
+  "description": "Pipedream Hedy Bot Components",
+  "main": "hedy_bot.app.mjs",
+  "keywords": [
+    "pipedream",
+    "hedy_bot"
+  ],
+  "homepage": "https://pipedream.com/apps/hedy_bot",
+  "author": "Pipedream <support@pipedream.com> (https://pipedream.com/)",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@pipedream/platform": "^3.0.3"
+  }
+}
